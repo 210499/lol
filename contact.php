@@ -1,22 +1,34 @@
-<?php
-
-if(isset($_POST['send'])) {
-   // Prepare the email
-$to = '210499@hkis.edu.hk';
-
-$name = $_POST['name'];
-$mail_from = $_POST['email'];
-   $subject = 'Message sent from website';
-   $message = $_POST['message'];
-
-$header = "From: $name <$mail_from>";
-
-   // Send it
-   $sent = mail($to, $subject, $message, $header);
-   if($sent) {
-   echo 'Your message has been sent successfully!';
-   } else {
-   echo 'Sorry, your message could not send.';
-   }
-}
-?>
+<?php 
+$action=$_REQUEST['action']; 
+if ($action=="")    /* display the contact form */ 
+    { 
+    ?> 
+    <form  action="" method="POST" enctype="multipart/form-data"> 
+    <input type="hidden" name="action" value="submit"> 
+    Your name:<br> 
+    <input name="name" type="text" value="" size="30"/><br> 
+    Your email:<br> 
+    <input name="email" type="text" value="" size="30"/><br> 
+    Your message:<br> 
+    <textarea name="message" rows="7" cols="30"></textarea><br> 
+    <input type="submit" value="Send email"/> 
+    </form> 
+    <?php 
+    }  
+else                /* send the submitted data */ 
+    { 
+    $name=$_REQUEST['name']; 
+    $email=$_REQUEST['email']; 
+    $message=$_REQUEST['message']; 
+    if (($name=="")||($email=="")||($message=="")) 
+        { 
+        echo "All fields are required, please fill <a href=\"\">the form</a> again."; 
+        } 
+    else{         
+        $from="From: $name<$email>\r\nReturn-path: $email"; 
+        $subject="Message sent using your contact form"; 
+        mail("210499@hkis.edu.hk", $subject, $message, $from); 
+        echo "Email sent!"; 
+        } 
+    }   
+?> 
